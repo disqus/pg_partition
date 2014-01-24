@@ -16,12 +16,14 @@ CREATE OR REPLACE FUNCTION create_partitions(
     in_interval INTERVAL
 )
 RETURNS SETOF text
+STRICT
 LANGUAGE sql
 AS $q$
 WITH t AS (
     SELECT
         i,
         CASE 
+        WHEN in_start <> in_start AT TIME ZONE 'UTC' THEN implementation_error('You really want UTC timestamps to start.'::text)
         WHEN in_interval >= '1 year' THEN to_char(i, 'YYYY')
         WHEN in_interval >= '1 month' THEN to_char(i, 'YYYYMM')
         WHEN in_interval >= '1 day' THEN to_char(i, 'YYYYMMDD')
