@@ -37,7 +37,18 @@ WITH t AS (
 )
 SELECT
     format(
-        'CREATE TABLE %I( CHECK( %s >= %L AND %I < %L )) INHERITS (%I);
+        'CREATE TABLE %I(
+    CHECK( %s >= %L AND %I < %L )
+) INHERITS (%I);
+
+WITH t AS (
+    DELETE FROM ONLY %I
+    WHERE %s >= %L AND %I < %L
+    RETURNING *
+)
+INSERT INTO %I
+SELECT * FROM t;
+
 CREATE OR REPLACE FUNCTION %I()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -50,9 +61,13 @@ CREATE TRIGGER %I
     BEFORE INSERT ON %I
     FOR EACH ROW
     WHEN (NEW.%I >= %L AND NEW.%I < %L)
-    EXECUTE PROCEDURE %I();'
-    , in_table || '_' || "starter", in_column, i, in_column,
-    COALESCE(lead(i,1) OVER (), 'infinity'), in_table,
+    EXECUTE PROCEDURE %I();',
+    in_table || '_' || "starter",
+    in_column, i, in_column, COALESCE(lead(i,1) OVER (), 'infinity'),
+    in_table,
+    in_table,
+    in_column, i, in_column, COALESCE(lead(i,1) OVER (), 'infinity'),
+    in_table || '_' || "starter",
     in_table || '_' || "starter", in_table || '_' || "starter",
     in_table || '_' || "starter" || '_insert', in_table, in_column, i,
     in_column,  COALESCE(lead(i,1) OVER (), 'infinity'),
