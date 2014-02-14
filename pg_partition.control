@@ -1,0 +1,5 @@
+# pg_partition extension
+comment = 'An extension for partitioning tables'
+default_version = '0.0.1'
+module_pathname = '$libdir/pg_audit'
+relocatable = true

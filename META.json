@@ -1,0 +1,42 @@
+{
+    "name": "pg_partition",
+    "abstract": "Partition your PostgreSQL tables",
+    "description": "A system for partitioning tables, initially using TIMESTAMP WITH TIME ZONE",
+    "version": "0.0.1",
+    "maintainer": "David Fetter <david.fetter@disqus.com>",
+    "license": "MIT",
+
+    "provides": {
+        "pg_partition": {
+            "abstract": "partition management",
+            "file": "sql/pg_partition--0.0.1.sql",
+            "docfile": "doc/pg_partition.md",
+            "version": "0.0.1"
+        }
+    },
+
+    "prereqs" : {
+        "runtime": {
+            "requires": {
+                "PostgreSQL": "9.3.0"
+            }
+        }
+    },
+
+    "resources": {
+        "repository": {
+            "url": "https://davidfetter@github.com/disqus/pg_partition.git",
+            "web": "http://github.com/disqus/pg_partition",
+            "type": "git"
+        }
+    },
+
+    "tags": ["partitioning", "partition", "schlepping"],
+
+    "release_status": "unstable",
+
+    "meta-spec": {
+        "version": "1.0.0",
+        "url": "http://pgxn.org/meta/spec.txt"
+    }
+}
