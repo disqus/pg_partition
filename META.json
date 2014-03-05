@@ -2,16 +2,16 @@
     "name": "pg_partition",
     "abstract": "Partition your PostgreSQL tables",
     "description": "A system for partitioning tables, initially using TIMESTAMP WITH TIME ZONE",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "maintainer": "David Fetter <david.fetter@disqus.com>",
     "license": "MIT",
 
     "provides": {
         "pg_partition": {
             "abstract": "partition management",
-            "file": "sql/pg_partition--0.0.1.sql",
+            "file": "sql/pg_partition--0.1.0.sql",
             "docfile": "doc/pg_partition.md",
-            "version": "0.0.1"
+            "version": "0.1.0"
         }
     },
 
