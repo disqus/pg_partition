@@ -67,6 +67,69 @@ AS $$
     END;
 $$;
 
+CREATE OR REPLACE FUNCTION get_timestamps (
+    in_schema TEXT,
+    in_table TEXT,
+    in_column TEXT,
+    in_start TIMESTAMP WITH TIME ZONE,
+    in_end TIMESTAMP WITH TIME ZONE,
+    in_interval INTERVAL
+)
+RETURNS TABLE (
+    in_schema TEXT,
+    in_table TEXT,
+    in_column TEXT,
+    the_start TIMESTAMPTZ,
+    the_end TIMESTAMPTZ,
+    the_suffix TEXT
+)
+STRICT
+LANGUAGE sql
+AS $$
+SELECT
+    in_schema,
+    in_table,
+    in_column,
+    the_start AS the_tstz,
+    COALESCE(lead(the_tstz1) OVER (), the_tstz + (the_tstz - lag(the_tstz1) OVER ())) AS the_end,
+    to_char(the_tstz partition_name_format(in_interval)) AS the_suffix
+FROM
+    generate_series(in_start, in_end, in_interval) AS s(i)
+WHERE 
+    validate_inputs(
+        in_schema,
+        in_table,
+        in_column,
+        in_start,
+        in_end,
+        in_interval
+    )
+AND
+    i < in_end
+$$;
+
+CREATE OR REPLACE FUNCTION create_partition_table(
+    in_schema TEXT,
+    in_table TEXT,
+    in_column TEXT,
+    the_start TIMESTAMPTZ,
+    the_end TIMESTAMPTZ,
+    the_suffix TEXT
+)
+RETURNS TEXT
+STRICT
+LANGUAGE sql
+AS $q$
+SELECT format(
+        $$CREATE TABLE %I(
+    CHECK( %s >= %L AND %I < %L )
+) INHERITS (%I);$$,
+    in_table || '_' || the_suffix,
+    in_column, the_start, in_column, the_end,
+    in_table
+)
+$$;
+
 CREATE OR REPLACE FUNCTION create_partitions_trigger_when(
     in_schema TEXT,
     in_table TEXT,
@@ -141,7 +204,6 @@ FROM
 WHERE
     i < in_end;
 $q$;
-
 
 CREATE OR REPLACE FUNCTION create_partitions_rule(
     in_schema TEXT,
