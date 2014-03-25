@@ -2,7 +2,7 @@ SET timezone =  'UTC';
 BEGIN;
 CREATE EXTENSION pg_partition;
 CREATE TABLE foo(id SERIAL, ts TIMESTAMP WITH TIME ZONE);
-SELECT create_partitions(
+SELECT create_partitions_trigger_when(
     'public',
     'foo',
     'ts',
@@ -10,849 +10,736 @@ SELECT create_partitions(
     date_trunc('month', '2014-02-13 00:00:00+00'::timestamptz) + interval '1 month',
     interval '1 day'
 );
-                                        create_partitions                                        
+                                 create_partitions_trigger_when                                  
 -------------------------------------------------------------------------------------------------
- CREATE TABLE foo_20140201(                                                                     +
+ CREATE TABLE public.foo_20140201(                                                              +
      CHECK( ts >= 'Sat Feb 01 00:00:00 2014 UTC' AND ts < 'Sun Feb 02 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140201(ts);                                                              +
-                                                                                                +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140202(                                                              +
+     CHECK( ts >= 'Sun Feb 02 00:00:00 2014 UTC' AND ts < 'Mon Feb 03 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140203(                                                              +
+     CHECK( ts >= 'Mon Feb 03 00:00:00 2014 UTC' AND ts < 'Tue Feb 04 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140204(                                                              +
+     CHECK( ts >= 'Tue Feb 04 00:00:00 2014 UTC' AND ts < 'Wed Feb 05 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140205(                                                              +
+     CHECK( ts >= 'Wed Feb 05 00:00:00 2014 UTC' AND ts < 'Thu Feb 06 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140206(                                                              +
+     CHECK( ts >= 'Thu Feb 06 00:00:00 2014 UTC' AND ts < 'Fri Feb 07 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140207(                                                              +
+     CHECK( ts >= 'Fri Feb 07 00:00:00 2014 UTC' AND ts < 'Sat Feb 08 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140208(                                                              +
+     CHECK( ts >= 'Sat Feb 08 00:00:00 2014 UTC' AND ts < 'Sun Feb 09 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140209(                                                              +
+     CHECK( ts >= 'Sun Feb 09 00:00:00 2014 UTC' AND ts < 'Mon Feb 10 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140210(                                                              +
+     CHECK( ts >= 'Mon Feb 10 00:00:00 2014 UTC' AND ts < 'Tue Feb 11 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140211(                                                              +
+     CHECK( ts >= 'Tue Feb 11 00:00:00 2014 UTC' AND ts < 'Wed Feb 12 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140212(                                                              +
+     CHECK( ts >= 'Wed Feb 12 00:00:00 2014 UTC' AND ts < 'Thu Feb 13 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140213(                                                              +
+     CHECK( ts >= 'Thu Feb 13 00:00:00 2014 UTC' AND ts < 'Fri Feb 14 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140214(                                                              +
+     CHECK( ts >= 'Fri Feb 14 00:00:00 2014 UTC' AND ts < 'Sat Feb 15 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140215(                                                              +
+     CHECK( ts >= 'Sat Feb 15 00:00:00 2014 UTC' AND ts < 'Sun Feb 16 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140216(                                                              +
+     CHECK( ts >= 'Sun Feb 16 00:00:00 2014 UTC' AND ts < 'Mon Feb 17 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140217(                                                              +
+     CHECK( ts >= 'Mon Feb 17 00:00:00 2014 UTC' AND ts < 'Tue Feb 18 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140218(                                                              +
+     CHECK( ts >= 'Tue Feb 18 00:00:00 2014 UTC' AND ts < 'Wed Feb 19 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140219(                                                              +
+     CHECK( ts >= 'Wed Feb 19 00:00:00 2014 UTC' AND ts < 'Thu Feb 20 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140220(                                                              +
+     CHECK( ts >= 'Thu Feb 20 00:00:00 2014 UTC' AND ts < 'Fri Feb 21 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140221(                                                              +
+     CHECK( ts >= 'Fri Feb 21 00:00:00 2014 UTC' AND ts < 'Sat Feb 22 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140222(                                                              +
+     CHECK( ts >= 'Sat Feb 22 00:00:00 2014 UTC' AND ts < 'Sun Feb 23 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140223(                                                              +
+     CHECK( ts >= 'Sun Feb 23 00:00:00 2014 UTC' AND ts < 'Mon Feb 24 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140224(                                                              +
+     CHECK( ts >= 'Mon Feb 24 00:00:00 2014 UTC' AND ts < 'Tue Feb 25 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140225(                                                              +
+     CHECK( ts >= 'Tue Feb 25 00:00:00 2014 UTC' AND ts < 'Wed Feb 26 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140226(                                                              +
+     CHECK( ts >= 'Wed Feb 26 00:00:00 2014 UTC' AND ts < 'Thu Feb 27 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140227(                                                              +
+     CHECK( ts >= 'Thu Feb 27 00:00:00 2014 UTC' AND ts < 'Fri Feb 28 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
+ CREATE TABLE public.foo_20140228(                                                              +
+     CHECK( ts >= 'Fri Feb 28 00:00:00 2014 UTC' AND ts < 'Sat Mar 01 00:00:00 2014 UTC' )      +
+ ) INHERITS (public.foo);
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Sat Feb 01 00:00:00 2014 UTC' AND ts < 'Sun Feb 02 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140201                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140201()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140201 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140201_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Sat Feb 01 00:00:00 2014 UTC' AND NEW.ts < 'Sun Feb 02 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140201();                                                          +
- 
- CREATE TABLE foo_20140202(                                                                     +
-     CHECK( ts >= 'Sun Feb 02 00:00:00 2014 UTC' AND ts < 'Mon Feb 03 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140202(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140201                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Sun Feb 02 00:00:00 2014 UTC' AND ts < 'Mon Feb 03 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140202                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140202()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140202 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140202_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Sun Feb 02 00:00:00 2014 UTC' AND NEW.ts < 'Mon Feb 03 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140202();                                                          +
- 
- CREATE TABLE foo_20140203(                                                                     +
-     CHECK( ts >= 'Mon Feb 03 00:00:00 2014 UTC' AND ts < 'Tue Feb 04 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140203(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140202                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Mon Feb 03 00:00:00 2014 UTC' AND ts < 'Tue Feb 04 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140203                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140203()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140203 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140203_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Mon Feb 03 00:00:00 2014 UTC' AND NEW.ts < 'Tue Feb 04 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140203();                                                          +
- 
- CREATE TABLE foo_20140204(                                                                     +
-     CHECK( ts >= 'Tue Feb 04 00:00:00 2014 UTC' AND ts < 'Wed Feb 05 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140204(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140203                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Tue Feb 04 00:00:00 2014 UTC' AND ts < 'Wed Feb 05 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140204                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140204()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140204 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140204_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Tue Feb 04 00:00:00 2014 UTC' AND NEW.ts < 'Wed Feb 05 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140204();                                                          +
- 
- CREATE TABLE foo_20140205(                                                                     +
-     CHECK( ts >= 'Wed Feb 05 00:00:00 2014 UTC' AND ts < 'Thu Feb 06 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140205(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140204                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Wed Feb 05 00:00:00 2014 UTC' AND ts < 'Thu Feb 06 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140205                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140205()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140205 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140205_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Wed Feb 05 00:00:00 2014 UTC' AND NEW.ts < 'Thu Feb 06 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140205();                                                          +
- 
- CREATE TABLE foo_20140206(                                                                     +
-     CHECK( ts >= 'Thu Feb 06 00:00:00 2014 UTC' AND ts < 'Fri Feb 07 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140206(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140205                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Thu Feb 06 00:00:00 2014 UTC' AND ts < 'Fri Feb 07 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140206                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140206()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140206 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140206_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Thu Feb 06 00:00:00 2014 UTC' AND NEW.ts < 'Fri Feb 07 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140206();                                                          +
- 
- CREATE TABLE foo_20140207(                                                                     +
-     CHECK( ts >= 'Fri Feb 07 00:00:00 2014 UTC' AND ts < 'Sat Feb 08 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140207(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140206                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Fri Feb 07 00:00:00 2014 UTC' AND ts < 'Sat Feb 08 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140207                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140207()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140207 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140207_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Fri Feb 07 00:00:00 2014 UTC' AND NEW.ts < 'Sat Feb 08 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140207();                                                          +
- 
- CREATE TABLE foo_20140208(                                                                     +
-     CHECK( ts >= 'Sat Feb 08 00:00:00 2014 UTC' AND ts < 'Sun Feb 09 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140208(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140207                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Sat Feb 08 00:00:00 2014 UTC' AND ts < 'Sun Feb 09 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140208                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140208()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140208 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140208_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Sat Feb 08 00:00:00 2014 UTC' AND NEW.ts < 'Sun Feb 09 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140208();                                                          +
- 
- CREATE TABLE foo_20140209(                                                                     +
-     CHECK( ts >= 'Sun Feb 09 00:00:00 2014 UTC' AND ts < 'Mon Feb 10 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140209(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140208                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Sun Feb 09 00:00:00 2014 UTC' AND ts < 'Mon Feb 10 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140209                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140209()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140209 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140209_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Sun Feb 09 00:00:00 2014 UTC' AND NEW.ts < 'Mon Feb 10 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140209();                                                          +
- 
- CREATE TABLE foo_20140210(                                                                     +
-     CHECK( ts >= 'Mon Feb 10 00:00:00 2014 UTC' AND ts < 'Tue Feb 11 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140210(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140209                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Mon Feb 10 00:00:00 2014 UTC' AND ts < 'Tue Feb 11 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140210                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140210()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140210 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140210_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Mon Feb 10 00:00:00 2014 UTC' AND NEW.ts < 'Tue Feb 11 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140210();                                                          +
- 
- CREATE TABLE foo_20140211(                                                                     +
-     CHECK( ts >= 'Tue Feb 11 00:00:00 2014 UTC' AND ts < 'Wed Feb 12 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140211(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140210                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Tue Feb 11 00:00:00 2014 UTC' AND ts < 'Wed Feb 12 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140211                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140211()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140211 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140211_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Tue Feb 11 00:00:00 2014 UTC' AND NEW.ts < 'Wed Feb 12 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140211();                                                          +
- 
- CREATE TABLE foo_20140212(                                                                     +
-     CHECK( ts >= 'Wed Feb 12 00:00:00 2014 UTC' AND ts < 'Thu Feb 13 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140212(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140211                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Wed Feb 12 00:00:00 2014 UTC' AND ts < 'Thu Feb 13 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140212                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140212()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140212 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140212_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Wed Feb 12 00:00:00 2014 UTC' AND NEW.ts < 'Thu Feb 13 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140212();                                                          +
- 
- CREATE TABLE foo_20140213(                                                                     +
-     CHECK( ts >= 'Thu Feb 13 00:00:00 2014 UTC' AND ts < 'Fri Feb 14 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140213(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140212                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Thu Feb 13 00:00:00 2014 UTC' AND ts < 'Fri Feb 14 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140213                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140213()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140213 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140213_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Thu Feb 13 00:00:00 2014 UTC' AND NEW.ts < 'Fri Feb 14 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140213();                                                          +
- 
- CREATE TABLE foo_20140214(                                                                     +
-     CHECK( ts >= 'Fri Feb 14 00:00:00 2014 UTC' AND ts < 'Sat Feb 15 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140214(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140213                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Fri Feb 14 00:00:00 2014 UTC' AND ts < 'Sat Feb 15 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140214                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140214()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140214 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140214_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Fri Feb 14 00:00:00 2014 UTC' AND NEW.ts < 'Sat Feb 15 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140214();                                                          +
- 
- CREATE TABLE foo_20140215(                                                                     +
-     CHECK( ts >= 'Sat Feb 15 00:00:00 2014 UTC' AND ts < 'Sun Feb 16 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140215(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140214                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Sat Feb 15 00:00:00 2014 UTC' AND ts < 'Sun Feb 16 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140215                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140215()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140215 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140215_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Sat Feb 15 00:00:00 2014 UTC' AND NEW.ts < 'Sun Feb 16 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140215();                                                          +
- 
- CREATE TABLE foo_20140216(                                                                     +
-     CHECK( ts >= 'Sun Feb 16 00:00:00 2014 UTC' AND ts < 'Mon Feb 17 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140216(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140215                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Sun Feb 16 00:00:00 2014 UTC' AND ts < 'Mon Feb 17 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140216                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140216()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140216 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140216_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Sun Feb 16 00:00:00 2014 UTC' AND NEW.ts < 'Mon Feb 17 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140216();                                                          +
- 
- CREATE TABLE foo_20140217(                                                                     +
-     CHECK( ts >= 'Mon Feb 17 00:00:00 2014 UTC' AND ts < 'Tue Feb 18 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140217(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140216                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Mon Feb 17 00:00:00 2014 UTC' AND ts < 'Tue Feb 18 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140217                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140217()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140217 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140217_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Mon Feb 17 00:00:00 2014 UTC' AND NEW.ts < 'Tue Feb 18 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140217();                                                          +
- 
- CREATE TABLE foo_20140218(                                                                     +
-     CHECK( ts >= 'Tue Feb 18 00:00:00 2014 UTC' AND ts < 'Wed Feb 19 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140218(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140217                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Tue Feb 18 00:00:00 2014 UTC' AND ts < 'Wed Feb 19 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140218                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140218()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140218 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140218_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Tue Feb 18 00:00:00 2014 UTC' AND NEW.ts < 'Wed Feb 19 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140218();                                                          +
- 
- CREATE TABLE foo_20140219(                                                                     +
-     CHECK( ts >= 'Wed Feb 19 00:00:00 2014 UTC' AND ts < 'Thu Feb 20 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140219(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140218                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Wed Feb 19 00:00:00 2014 UTC' AND ts < 'Thu Feb 20 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140219                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140219()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140219 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140219_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Wed Feb 19 00:00:00 2014 UTC' AND NEW.ts < 'Thu Feb 20 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140219();                                                          +
- 
- CREATE TABLE foo_20140220(                                                                     +
-     CHECK( ts >= 'Thu Feb 20 00:00:00 2014 UTC' AND ts < 'Fri Feb 21 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140220(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140219                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Thu Feb 20 00:00:00 2014 UTC' AND ts < 'Fri Feb 21 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140220                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140220()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140220 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140220_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Thu Feb 20 00:00:00 2014 UTC' AND NEW.ts < 'Fri Feb 21 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140220();                                                          +
- 
- CREATE TABLE foo_20140221(                                                                     +
-     CHECK( ts >= 'Fri Feb 21 00:00:00 2014 UTC' AND ts < 'Sat Feb 22 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140221(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140220                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Fri Feb 21 00:00:00 2014 UTC' AND ts < 'Sat Feb 22 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140221                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140221()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140221 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140221_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Fri Feb 21 00:00:00 2014 UTC' AND NEW.ts < 'Sat Feb 22 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140221();                                                          +
- 
- CREATE TABLE foo_20140222(                                                                     +
-     CHECK( ts >= 'Sat Feb 22 00:00:00 2014 UTC' AND ts < 'Sun Feb 23 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140222(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140221                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Sat Feb 22 00:00:00 2014 UTC' AND ts < 'Sun Feb 23 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140222                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140222()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140222 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140222_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Sat Feb 22 00:00:00 2014 UTC' AND NEW.ts < 'Sun Feb 23 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140222();                                                          +
- 
- CREATE TABLE foo_20140223(                                                                     +
-     CHECK( ts >= 'Sun Feb 23 00:00:00 2014 UTC' AND ts < 'Mon Feb 24 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140223(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140222                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Sun Feb 23 00:00:00 2014 UTC' AND ts < 'Mon Feb 24 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140223                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140223()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140223 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140223_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Sun Feb 23 00:00:00 2014 UTC' AND NEW.ts < 'Mon Feb 24 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140223();                                                          +
- 
- CREATE TABLE foo_20140224(                                                                     +
-     CHECK( ts >= 'Mon Feb 24 00:00:00 2014 UTC' AND ts < 'Tue Feb 25 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140224(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140223                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Mon Feb 24 00:00:00 2014 UTC' AND ts < 'Tue Feb 25 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140224                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140224()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140224 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140224_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Mon Feb 24 00:00:00 2014 UTC' AND NEW.ts < 'Tue Feb 25 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140224();                                                          +
- 
- CREATE TABLE foo_20140225(                                                                     +
-     CHECK( ts >= 'Tue Feb 25 00:00:00 2014 UTC' AND ts < 'Wed Feb 26 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140225(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140224                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Tue Feb 25 00:00:00 2014 UTC' AND ts < 'Wed Feb 26 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140225                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140225()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140225 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140225_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Tue Feb 25 00:00:00 2014 UTC' AND NEW.ts < 'Wed Feb 26 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140225();                                                          +
- 
- CREATE TABLE foo_20140226(                                                                     +
-     CHECK( ts >= 'Wed Feb 26 00:00:00 2014 UTC' AND ts < 'Thu Feb 27 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140226(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140225                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Wed Feb 26 00:00:00 2014 UTC' AND ts < 'Thu Feb 27 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140226                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140226()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140226 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140226_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Wed Feb 26 00:00:00 2014 UTC' AND NEW.ts < 'Thu Feb 27 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140226();                                                          +
- 
- CREATE TABLE foo_20140227(                                                                     +
-     CHECK( ts >= 'Thu Feb 27 00:00:00 2014 UTC' AND ts < 'Fri Feb 28 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140227(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140226                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Thu Feb 27 00:00:00 2014 UTC' AND ts < 'Fri Feb 28 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140227                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140227()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140227 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140227_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Thu Feb 27 00:00:00 2014 UTC' AND NEW.ts < 'Fri Feb 28 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140227();                                                          +
- 
- CREATE TABLE foo_20140228(                                                                     +
-     CHECK( ts >= 'Fri Feb 28 00:00:00 2014 UTC' AND ts < 'Sat Mar 01 00:00:00 2014 UTC' )      +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140228(ts);                                                              +
-                                                                                                +
+ INSERT INTO public.foo_20140227                                                                +
+ SELECT * FROM t;
  WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
+     DELETE FROM ONLY public.foo                                                                +
      WHERE ts >= 'Fri Feb 28 00:00:00 2014 UTC' AND ts < 'Sat Mar 01 00:00:00 2014 UTC'         +
      RETURNING *                                                                                +
  )                                                                                              +
- INSERT INTO foo_20140228                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140228()                                                      +
+ INSERT INTO public.foo_20140228                                                                +
+ SELECT * FROM t;
+ CREATE INDEX ON public.foo_20140201(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140202(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140203(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140204(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140205(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140206(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140207(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140208(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140209(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140210(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140211(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140212(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140213(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140214(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140215(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140216(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140217(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140218(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140219(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140220(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140221(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140222(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140223(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140224(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140225(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140226(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140227(ts);                                                       +
+ 
+ CREATE INDEX ON public.foo_20140228(ts);                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140201()                                               +
  RETURNS TRIGGER                                                                                +
  LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
+ AS $t$                                                                                         +
  BEGIN                                                                                          +
-     INSERT INTO foo_20140228 VALUES (NEW.*);                                                   +
+     INSERT INTO public.foo_20140201 VALUES (NEW.*);                                            +
      RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140228_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140202()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140202 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140203()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140203 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140204()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140204 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140205()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140205 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140206()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140206 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140207()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140207 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140208()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140208 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140209()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140209 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140210()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140210 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140211()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140211 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140212()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140212 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140213()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140213 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140214()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140214 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140215()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140215 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140216()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140216 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140217()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140217 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140218()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140218 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140219()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140219 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140220()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140220 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140221()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140221 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140222()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140222 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140223()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140223 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140224()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140224 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140225()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140225 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140226()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140226 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140227()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140227 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE OR REPLACE FUNCTION public.foo_20140228()                                               +
+ RETURNS TRIGGER                                                                                +
+ LANGUAGE plpgsql                                                                               +
+ AS $t$                                                                                         +
+ BEGIN                                                                                          +
+     INSERT INTO public.foo_20140228 VALUES (NEW.*);                                            +
+     RETURN NULL;                                                                               +
+ END;$t$;                                                                                       +
+ 
+ CREATE TRIGGER foo_20140201                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Sat Feb 01 00:00:00 2014 UTC' AND NEW.ts < 'Sun Feb 02 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140201();
+ CREATE TRIGGER foo_20140202                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Sun Feb 02 00:00:00 2014 UTC' AND NEW.ts < 'Mon Feb 03 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140202();
+ CREATE TRIGGER foo_20140203                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Mon Feb 03 00:00:00 2014 UTC' AND NEW.ts < 'Tue Feb 04 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140203();
+ CREATE TRIGGER foo_20140204                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Tue Feb 04 00:00:00 2014 UTC' AND NEW.ts < 'Wed Feb 05 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140204();
+ CREATE TRIGGER foo_20140205                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Wed Feb 05 00:00:00 2014 UTC' AND NEW.ts < 'Thu Feb 06 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140205();
+ CREATE TRIGGER foo_20140206                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Thu Feb 06 00:00:00 2014 UTC' AND NEW.ts < 'Fri Feb 07 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140206();
+ CREATE TRIGGER foo_20140207                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Fri Feb 07 00:00:00 2014 UTC' AND NEW.ts < 'Sat Feb 08 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140207();
+ CREATE TRIGGER foo_20140208                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Sat Feb 08 00:00:00 2014 UTC' AND NEW.ts < 'Sun Feb 09 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140208();
+ CREATE TRIGGER foo_20140209                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Sun Feb 09 00:00:00 2014 UTC' AND NEW.ts < 'Mon Feb 10 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140209();
+ CREATE TRIGGER foo_20140210                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Mon Feb 10 00:00:00 2014 UTC' AND NEW.ts < 'Tue Feb 11 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140210();
+ CREATE TRIGGER foo_20140211                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Tue Feb 11 00:00:00 2014 UTC' AND NEW.ts < 'Wed Feb 12 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140211();
+ CREATE TRIGGER foo_20140212                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Wed Feb 12 00:00:00 2014 UTC' AND NEW.ts < 'Thu Feb 13 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140212();
+ CREATE TRIGGER foo_20140213                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Thu Feb 13 00:00:00 2014 UTC' AND NEW.ts < 'Fri Feb 14 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140213();
+ CREATE TRIGGER foo_20140214                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Fri Feb 14 00:00:00 2014 UTC' AND NEW.ts < 'Sat Feb 15 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140214();
+ CREATE TRIGGER foo_20140215                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Sat Feb 15 00:00:00 2014 UTC' AND NEW.ts < 'Sun Feb 16 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140215();
+ CREATE TRIGGER foo_20140216                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Sun Feb 16 00:00:00 2014 UTC' AND NEW.ts < 'Mon Feb 17 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140216();
+ CREATE TRIGGER foo_20140217                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Mon Feb 17 00:00:00 2014 UTC' AND NEW.ts < 'Tue Feb 18 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140217();
+ CREATE TRIGGER foo_20140218                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Tue Feb 18 00:00:00 2014 UTC' AND NEW.ts < 'Wed Feb 19 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140218();
+ CREATE TRIGGER foo_20140219                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Wed Feb 19 00:00:00 2014 UTC' AND NEW.ts < 'Thu Feb 20 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140219();
+ CREATE TRIGGER foo_20140220                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Thu Feb 20 00:00:00 2014 UTC' AND NEW.ts < 'Fri Feb 21 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140220();
+ CREATE TRIGGER foo_20140221                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Fri Feb 21 00:00:00 2014 UTC' AND NEW.ts < 'Sat Feb 22 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140221();
+ CREATE TRIGGER foo_20140222                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Sat Feb 22 00:00:00 2014 UTC' AND NEW.ts < 'Sun Feb 23 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140222();
+ CREATE TRIGGER foo_20140223                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Sun Feb 23 00:00:00 2014 UTC' AND NEW.ts < 'Mon Feb 24 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140223();
+ CREATE TRIGGER foo_20140224                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Mon Feb 24 00:00:00 2014 UTC' AND NEW.ts < 'Tue Feb 25 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140224();
+ CREATE TRIGGER foo_20140225                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Tue Feb 25 00:00:00 2014 UTC' AND NEW.ts < 'Wed Feb 26 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140225();
+ CREATE TRIGGER foo_20140226                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Wed Feb 26 00:00:00 2014 UTC' AND NEW.ts < 'Thu Feb 27 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140226();
+ CREATE TRIGGER foo_20140227                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
+     FOR EACH ROW                                                                               +
+     WHEN (NEW.ts >= 'Thu Feb 27 00:00:00 2014 UTC' AND NEW.ts < 'Fri Feb 28 00:00:00 2014 UTC')+
+     EXECUTE PROCEDURE foo_20140227();
+ CREATE TRIGGER foo_20140228                                                                    +
+     BEFORE INSERT ON public.foo                                                                +
      FOR EACH ROW                                                                               +
      WHEN (NEW.ts >= 'Fri Feb 28 00:00:00 2014 UTC' AND NEW.ts < 'Sat Mar 01 00:00:00 2014 UTC')+
-     EXECUTE PROCEDURE foo_20140228();                                                          +
- 
- CREATE TABLE foo_20140301(                                                                     +
-     CHECK( ts >= 'Sat Mar 01 00:00:00 2014 UTC' AND ts < 'infinity' )                          +
- ) INHERITS (foo);                                                                              +
-                                                                                                +
- CREATE INDEX ON foo_20140301(ts);                                                              +
-                                                                                                +
- WITH t AS (                                                                                    +
-     DELETE FROM ONLY foo                                                                       +
-     WHERE ts >= 'Sat Mar 01 00:00:00 2014 UTC' AND ts < 'infinity'                             +
-     RETURNING *                                                                                +
- )                                                                                              +
- INSERT INTO foo_20140301                                                                       +
- SELECT * FROM t;                                                                               +
-                                                                                                +
- CREATE OR REPLACE FUNCTION foo_20140301()                                                      +
- RETURNS TRIGGER                                                                                +
- LANGUAGE plpgsql                                                                               +
- AS $$                                                                                          +
- BEGIN                                                                                          +
-     INSERT INTO foo_20140301 VALUES (NEW.*);                                                   +
-     RETURN NULL;                                                                               +
- END$$;                                                                                         +
-                                                                                                +
- CREATE TRIGGER foo_20140301_insert                                                             +
-     BEFORE INSERT ON foo                                                                       +
-     FOR EACH ROW                                                                               +
-     WHEN (NEW.ts >= 'Sat Mar 01 00:00:00 2014 UTC' AND NEW.ts < 'infinity')                    +
-     EXECUTE PROCEDURE foo_20140301();                                                          +
- 
-(29 rows)
+     EXECUTE PROCEDURE foo_20140228();
+(140 rows)
 
 ROLLBACK;

@@ -32,7 +32,8 @@ AS $q$
                 WHERE
                     table_schema = in_schema AND
                     table_name = in_table AND
-                    column_name = in_column AND data_type = 'timestamp with time zone'
+                    column_name = in_column AND
+                    data_type = $$timestamp with time zone$$
             )
             THEN implementation_error(format('%s.%s.%s must be of type TIMESTAMP WITH TIME ZONE', in_schema, in_table, in_column))
         WHEN (in_start AT TIME ZONE 'UTC') <> date_trunc('day', in_start AT TIME ZONE 'UTC')
@@ -67,7 +68,7 @@ AS $$
     END;
 $$;
 
-CREATE OR REPLACE FUNCTION get_timestamps (
+CREATE OR REPLACE FUNCTION unroll_partition_spec (
     in_schema TEXT,
     in_table TEXT,
     in_column TEXT,
@@ -90,9 +91,12 @@ SELECT
     in_schema,
     in_table,
     in_column,
-    the_start AS the_tstz,
-    COALESCE(lead(the_tstz1) OVER (), the_tstz + (the_tstz - lag(the_tstz1) OVER ())) AS the_end,
-    to_char(the_tstz partition_name_format(in_interval)) AS the_suffix
+    i AS the_start,
+    COALESCE(
+        lead(i) OVER (ORDER BY i),
+        i + (i - lag(i) OVER (ORDER BY i))
+    ) AS the_end,
+    to_char(i, partition_name_format(in_interval)) AS the_suffix
 FROM
     generate_series(in_start, in_end, in_interval) AS s(i)
 WHERE 
@@ -121,14 +125,136 @@ STRICT
 LANGUAGE sql
 AS $q$
 SELECT format(
-        $$CREATE TABLE %I(
+        $$CREATE TABLE %I.%I(
     CHECK( %s >= %L AND %I < %L )
-) INHERITS (%I);$$,
+) INHERITS (%I.%I);$$,
+    in_schema,
     in_table || '_' || the_suffix,
     in_column, the_start, in_column, the_end,
-    in_table
+    in_schema, in_table
 )
-$$;
+$q$;
+
+CREATE OR REPLACE FUNCTION move_to_partition(
+    in_schema TEXT,
+    in_table TEXT,
+    in_column TEXT,
+    the_start TIMESTAMPTZ,
+    the_end TIMESTAMPTZ,
+    the_suffix TEXT
+)
+RETURNS TEXT
+STRICT
+LANGUAGE sql
+AS $q$
+SELECT format(
+        $$WITH t AS (
+    DELETE FROM ONLY %I.%I
+    WHERE %s >= %L AND %I < %L
+    RETURNING *
+)
+INSERT INTO %I.%I
+SELECT * FROM t;$$,
+    in_schema, in_table,
+    in_column, the_start, in_column, the_end,
+    in_schema, in_table || '_' || the_suffix
+)
+$q$;
+
+CREATE OR REPLACE FUNCTION create_partition_index(
+    in_schema TEXT,
+    in_table TEXT,
+    in_column TEXT,
+    the_suffix TEXT
+)
+RETURNS TEXT
+STRICT
+LANGUAGE sql
+AS $q$
+SELECT format(
+    $$CREATE INDEX ON %I.%I(%I);
+$$,
+    in_schema,
+    in_table || '_' || the_suffix,
+    in_column
+)
+$q$;
+
+CREATE OR REPLACE FUNCTION create_trigger_function(
+    in_schema TEXT,
+    in_table TEXT,
+    the_suffix TEXT
+)
+RETURNS TEXT
+STRICT
+LANGUAGE sql
+AS $q$
+SELECT format(
+    $$CREATE OR REPLACE FUNCTION %I.%I()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $t$
+BEGIN
+    INSERT INTO %I.%I VALUES (NEW.*);
+    RETURN NULL;
+END;$t$;
+$$,
+    in_schema,
+    in_table || '_' || the_suffix,
+    in_schema,
+    in_table || '_' || the_suffix
+)
+$q$;
+
+CREATE OR REPLACE FUNCTION create_trigger(
+    in_schema TEXT,
+    in_table TEXT,
+    in_column TEXT,
+    the_start TIMESTAMP WITH TIME ZONE,
+    the_end TIMESTAMP WITH TIME ZONE,
+    the_suffix TEXT
+)
+RETURNS TEXT
+STRICT
+LANGUAGE sql
+AS $q$
+SELECT format(
+    $$CREATE TRIGGER %I
+    BEFORE INSERT ON %I.%I
+    FOR EACH ROW
+    WHEN (NEW.%I >= %L AND NEW.%I < %L)
+    EXECUTE PROCEDURE %I();$$,
+    in_table || '_' || the_suffix,
+    in_schema, in_table,
+    in_column, the_start, in_column, the_end,
+    in_table || '_' || the_suffix
+);
+$q$;
+
+CREATE OR REPLACE FUNCTION create_rule(
+    in_schema TEXT,
+    in_table TEXT,
+    in_column TEXT,
+    the_start TIMESTAMP WITH TIME ZONE,
+    the_end TIMESTAMP WITH TIME ZONE,
+    the_suffix TEXT
+)
+RETURNS TEXT
+STRICT
+LANGUAGE sql
+AS $q$
+SELECT format(
+    $$CREATE RULE %I AS
+    ON INSERT TO %I.%I
+    WHERE (NEW.%I >= %L AND NEW.%I < %L)
+    DO INSTEAD INSERT INTO %I.%I VALUES (NEW.*);
+$$,
+    in_table || '_' || the_suffix,
+    in_schema, in_table,
+    in_column, the_start, in_column, the_end,
+    in_schema, in_table || '_' || the_suffix
+);
+$q$;
 
 CREATE OR REPLACE FUNCTION create_partitions_trigger_when(
     in_schema TEXT,
@@ -142,67 +268,63 @@ RETURNS SETOF TEXT
 LANGUAGE SQL
 AS $q$
 WITH t AS (
-    SELECT i
-    FROM
-    generate_series(in_start, in_end, in_interval) AS s(i)
-    WHERE 
-        validate_inputs(
+    SELECT *
+    FROM unroll_partition_spec (
+        in_schema,
+        in_table,
+        in_column,
+        in_start,
+        in_end,
+        in_interval 
+    )
+)
+    SELECT
+        create_partition_table(
             in_schema,
             in_table,
             in_column,
-            in_start,
-            in_end,
-            in_interval
+            the_start,
+            the_end,
+            the_suffix
         )
-)
-SELECT
-    format(
-        $$CREATE TABLE %I(
-    CHECK( %s >= %L AND %I < %L )
-) INHERITS (%I);
-
-CREATE INDEX ON %I(%I);
-
-WITH t AS (
-    DELETE FROM ONLY %I
-    WHERE %s >= %L AND %I < %L
-    RETURNING *
-)
-INSERT INTO %I
-SELECT * FROM t;
-
-CREATE OR REPLACE FUNCTION %I()
-RETURNS TRIGGER
-LANGUAGE plpgsql
-AS $t$
-BEGIN
-    INSERT INTO %I VALUES (NEW.*);
-    RETURN NULL;
-END$t$;
-
-CREATE TRIGGER %I
-    BEFORE INSERT ON %I
-    FOR EACH ROW
-    WHEN (NEW.%I >= %L AND NEW.%I < %L)
-    EXECUTE PROCEDURE %I();
-$$,
-    in_table || '_' || to_char(i, partition_name_format(in_interval)),
-    in_column, i, in_column, COALESCE(lead(i,1) OVER (), i + (i - lag(i,1) OVER ())),
-    in_table,
-    in_table || '_' || to_char(i, partition_name_format(in_interval)), in_column,
-    in_table,
-    in_column, i, in_column, COALESCE(lead(i,1) OVER (), i + (i - lag(i,1) OVER ())),
-    in_table || '_' || to_char(i, partition_name_format(in_interval)),
-    in_table || '_' || to_char(i, partition_name_format(in_interval)),
-    in_table || '_' || to_char(i, partition_name_format(in_interval)),
-    in_table || '_' || to_char(i, partition_name_format(in_interval)) || '_insert', in_table, in_column, i,
-    in_column,  COALESCE(lead(i,1) OVER (), i + (i - lag(i,1) OVER ())),
-    in_table || '_' || to_char(i, partition_name_format(in_interval))
-    )::text
-FROM
-    t
-WHERE
-    i < in_end;
+    FROM t t0
+UNION ALL
+    SELECT
+        move_to_partition(
+            in_schema,
+            in_table,
+            in_column,
+            the_start,
+            the_end,
+            the_suffix
+        )
+    FROM t t1
+UNION ALL
+    SELECT
+        create_partition_index(
+            in_schema,
+            in_table,
+            in_column,
+            the_suffix
+        )
+    FROM t t2
+UNION ALL
+    SELECT create_trigger_function(
+        in_schema,
+        in_table,
+        the_suffix
+    )
+    FROM t t3
+UNION ALL
+    SELECT create_trigger(
+        in_schema,
+        in_table,
+        in_column,
+        the_start,
+        the_end,
+        the_suffix
+    )
+    FROM t t4
 $q$;
 
 CREATE OR REPLACE FUNCTION create_partitions_rule(
@@ -218,53 +340,54 @@ STRICT
 LANGUAGE sql
 AS $q$
 WITH t AS (
-    SELECT i
-    FROM
-    generate_series(in_start, in_end, in_interval) AS s(i)
-    WHERE 
-        validate_inputs(
+    SELECT *
+    FROM unroll_partition_spec (
+        in_schema,
+        in_table,
+        in_column,
+        in_start,
+        in_end,
+        in_interval 
+    )
+)
+    SELECT
+        create_partition_table(
             in_schema,
             in_table,
             in_column,
-            in_start,
-            in_end,
-            in_interval
+            the_start,
+            the_end,
+            the_suffix
         )
-)
-SELECT
-    format(
-        'CREATE TABLE %I(
-    CHECK( %s >= %L AND %I < %L )
-) INHERITS (%I);
-
-CREATE INDEX ON %I(%I);
-
-WITH t AS (
-    DELETE FROM ONLY %I
-    WHERE %s >= %L AND %I < %L
-    RETURNING *
-)
-INSERT INTO %I
-SELECT * FROM t;
-
-CREATE RULE %I AS
-    ON INSERT TO %I
-    WHERE (NEW.%I >= %L AND NEW.%I < %L)
-    DO INSTEAD INSERT INTO %I VALUES (NEW.*);
-
-',
-    in_table || '_' || to_char(i, partition_name_format(in_interval)),
-    in_column, i, in_column, COALESCE(lead(i,1) OVER (), i + (i - lag(i,1) OVER ())),
-    in_table,
-    in_table || '_' || to_char(i, partition_name_format(in_interval)), in_column,
-    in_table,
-    in_column, i, in_column, COALESCE(lead(i,1) OVER (), i + (i - lag(i,1) OVER ())),
-    in_table || '_' || to_char(i, partition_name_format(in_interval)),
-    in_table || '_' || to_char(i, partition_name_format(in_interval)),
-    in_table,
-    in_column, i, in_column, COALESCE(lead(i,1) OVER (), i + (i - lag(i,1) OVER ())),
-    in_table || '_' || to_char(i, partition_name_format(in_interval))
-    )::text
-FROM t
-WHERE i < in_end;
+    FROM t t0
+UNION ALL
+    SELECT
+        move_to_partition(
+            in_schema,
+            in_table,
+            in_column,
+            the_start,
+            the_end,
+            the_suffix
+        )
+    FROM t t1
+UNION ALL
+    SELECT
+        create_partition_index(
+            in_schema,
+            in_table,
+            in_column,
+            the_suffix
+        )
+    FROM t t2
+UNION ALL
+    SELECT create_rule(
+        in_schema,
+        in_table,
+        in_column,
+        the_start,
+        the_end,
+        the_suffix
+    )
+    FROM t t3
 $q$;

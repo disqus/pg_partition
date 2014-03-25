@@ -6,7 +6,7 @@ CREATE EXTENSION pg_partition;
 
 CREATE TABLE foo(id SERIAL, ts TIMESTAMP WITH TIME ZONE);
 
-SELECT create_partitions(
+SELECT create_partitions_trigger_when(
     'public',
     'foo',
     'ts',
